@@ -5,25 +5,31 @@
 
 define([
            'dojo/_base/declare',
+           'dojo/_base/array',
            'dojo/dom-construct',
            'dojo/on',
+           'dojo/request',
            'dojo/aspect',
            'dijit/Dialog',
            'dijit/form/Button',
            'dijit/form/TextBox',
            'dijit/focus',
-           'JBrowse/View/LocationList'
+           'JBrowse/View/LocationList',
+           'JBrowse/Util'
        ],
        function(
            declare,
+           array,
            dom,
            on,
+           request,
            aspect,
            Dialog,
            dijitButton,
            dijitTextBox,
            dijitFocus,
-           LocationListView
+           LocationListView,
+           Util
        ) {
 return declare( null, {
 
@@ -58,15 +64,42 @@ return declare( null, {
         var container = dom.create('div',{});
 
         // show the description if there is one
+        var thisB = this;
         if( this.prompt ) {
             dom.create('div', {
                            className: 'prompt',
                            innerHTML: this.prompt
                        }, container );
-            var subcontainer = dojo.create('div', { margin: '10px' }, container);
+            var subcontainer = dojo.create('div', { padding: '10px' }, container);
             var searchBox = new dijitTextBox({intermediateChanges: true}).placeAt(subcontainer);
             on(searchBox, "change", function() {
-                console.log('here',searchBox.get('value'));
+                request(thisB.browser.config.names.url, {
+                    query: {
+                        contains: searchBox.get('value')
+                    },
+                    handleAs: 'json'
+                }).then(function(res) {
+                    console.log(res);
+                    //thisB.locationListView.update(res);
+                    var locations = array.map( res || [], function( obj ) {
+                        l = obj.location;
+                        return { locstring: Util.assembleLocString( l ),
+                                 location: l,
+                                 label: l.name || l.objectName,
+                                 description: l.description,
+                                 score: l.score,
+                                 tracks: array.map( array.filter( l.tracks || [], function(t) { return t; }), // remove nulls
+                                                    function(t) {
+                                                        return t.key || t.name || t.label || t;
+                                                    })
+                                         .join(', ')
+                               };
+                    });
+                    console.log(locations);
+                    //thisB.locationListView.store.setData([]);
+                    thisB.locationListView.grid.store.setData(locations);
+                    thisB.locationListView.grid.refresh();
+                });
             });
             this.searchBox = searchBox;
         }

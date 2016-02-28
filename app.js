@@ -15,16 +15,24 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-    var q=(req.query.equals || req.query.startswith).toLowerCase();
+    var q=(req.query.equals || req.query.startswith || req.query.contains).toLowerCase();
+
+    var fields = ["name"];
+    var method = null;
+    if(req.query.contains) {
+        fields.push('description');
+    }
+    method = "phrase_prefix";
+
     client.search({
         index: 'gene',
         type: 'loc',
         body: {
             "query": {
                 "multi_match" : {
-                    "type": "phrase_prefix",
+                    "type": method,
                     "query": q,
-                    "fields": [ "name" ]
+                    "fields":fields
                 }
             }
         }
@@ -35,10 +43,11 @@ app.get('/', function(req, res) {
                 "name": obj._source.name,
                 "location": {
                     "start": obj._source.start,
+                    "description": obj._source.description,
+                    "objectName" : obj._source.name,
                     "end": obj._source.end,
                     "ref": obj._source.ref,
                     "tracks": [obj._source.track_index],
-                    "objectName" : obj._source.name 
                 }
             };
         });

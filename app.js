@@ -16,9 +16,19 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-    var pre = !!req.query.startswith?'':'*';
+    var q=(req.query.equals || req.query.startswith).toLowerCase();
     client.search({
-        q: pre+(req.query.equals || req.query.startswith).toLowerCase()+'*'
+        index: 'gene',
+        type: 'loc',
+        body: {
+            "query": {
+                "multi_match" : {
+                    "type": "phrase_prefix",
+                    "query": q,
+                    "fields": [ "name", "description" ] 
+                }
+            }
+        }
     }).then(function (resp) {
         var hits = resp.hits.hits;
         console.log(hits);

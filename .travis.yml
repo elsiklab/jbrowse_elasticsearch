@@ -12,7 +12,7 @@ cache:
 install:
   - cpanm --notest git://github.com/gmod/jbrowse.git -l extlib/
   - npm install
-  - export PERL5LIB=$PERL5LIB:extlib/
+  - export PERL5LIB=$PERL5LIB:extlib/lib/perl5
 script:
   - extlib/bin/flatfile-to-json.pl --gff test/volvox.gff --trackLabel volvox --trackType CanvasFeatures --nameAttributes name,id,description,note
   - mocha

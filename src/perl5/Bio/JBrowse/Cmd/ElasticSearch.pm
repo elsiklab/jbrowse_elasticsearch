@@ -19,7 +19,6 @@ use Storable ();
 use File::Path ();
 use File::Temp ();
 use List::Util ();
-use Data::Dumper;
 
 use GenomeDB ();
 use Bio::JBrowse::ElasticStore ();
@@ -256,30 +255,21 @@ sub do_hash_operation {
     my ( $lc_name, $op_name, $record ) = @$op;
 
     if($self->opt('verbose')) {
-        print $lc_name . " ".$self->name_store->meta->{track_names}[$record->[1]] ."\n";
+        print "$lc_name\n";
     }
 
     # not allowed to index names with '.'
     if($lc_name ne '.') {
-        $self->{e}->update(
+        $self->{e}->index(
             index   => 'gene',
             type    => 'loc',
-            id      => $record->[2],
             body    => {
-                upsert => {
-                    description => [$lc_name],
-                    feat => [{
-                        description => $lc_name,
-                        track_index => $self->name_store->meta->{track_names}[$record->[1]],
-                        ref => $record->[3],
-                        start => $record->[4],
-                        end => $record->[5]
-                    }]
-                },
-                script => 'if(ctx._source.containsKey("description")) { if(!ctx._source.description.contains(new_description)) {ctx._source.description += new_description; }} else {ctx._source.description = [new_description]}',
-                params => {
-                    "new_description" => $lc_name
-                }
+                description => $lc_name,
+                name => $record->[2],
+                track_index => $self->name_store->meta->{track_names}[$record->[1]],
+                ref => $record->[3],
+                start => $record->[4],
+                end => $record->[5]
             }
         );
     }

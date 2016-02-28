@@ -21,15 +21,16 @@ app.get('/', function(req, res) {
         q: pre+(req.query.equals || req.query.startswith).toLowerCase()+'*'
     }).then(function (resp) {
         var hits = resp.hits.hits;
+        console.log(hits);
         var ret = hits.map(function(obj) {
             return {
-                "name": obj._id,
+                "name": obj._source.name,
                 "location": {
                     "start": obj._source.start,
                     "end": obj._source.end,
                     "ref": obj._source.ref,
                     "tracks": [obj._source.track_index],
-                    "objectName" : obj._id 
+                    "objectName" : obj._source.name 
                 }
             }
         });

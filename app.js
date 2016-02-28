@@ -1,4 +1,4 @@
-var elasticsearch = require('elasticsearch')
+var elasticsearch = require('elasticsearch');
 var express = require('express');
 var app = express();
 
@@ -42,7 +42,7 @@ app.get('/', function(req, res) {
                     "tracks": [obj._source.track_index],
                     "objectName" : obj._source.name 
                 }
-            }
+            };
         });
         res.type('application/json');
         res.send(ret);

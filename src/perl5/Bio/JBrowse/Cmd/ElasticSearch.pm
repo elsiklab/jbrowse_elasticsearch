@@ -268,7 +268,13 @@ sub do_hash_operation {
                     start => $record->[4],
                     end => $record->[5]
                 },
-                script => 'if(ctx._source.containsKey("description")) {ctx._source.description += new_description;} else {ctx._source.description = [new_description]}'
+                script => {
+                    "lang" => "expression",
+                    "inline" => "doc['description'] += new_description"
+                },
+                params => {
+                    "new_description" => $lc_name
+                }
             }
         );
     }

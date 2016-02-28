@@ -20,7 +20,7 @@ sub option_defaults {(
     dir => 'data',
     completionLimit => 20,
     locationLimit => 100,
-    url => 'http://localhost:4730/elasticsearch/',
+    url => 'http://localhost:4730/',
     elasticurl => 'http://localhost:9200',
     mem => 256 * 2**20,
     tracks => [],

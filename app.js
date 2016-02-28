@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
                 "multi_match" : {
                     "type": "phrase_prefix",
                     "query": q,
-                    "fields": [ "name", "description" ] 
+                    "fields": [ "name" ]
                 }
             }
         }

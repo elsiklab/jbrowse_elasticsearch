@@ -1,5 +1,9 @@
 sudo: false
 language: perl
+addons:
+  apt:
+    packages:
+    - libdb-dev
 services:
   - elasticsearch
 cache:

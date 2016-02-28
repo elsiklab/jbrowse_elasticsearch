@@ -10,7 +10,7 @@ A JBrowse plugin for indexing names with elasticsearch
 
 # delete all
 
-    curl -XDELETE 'http://localhost:9200/_all' && echo<Paste>
+    curl -XDELETE 'http://localhost:9200/_all' && echo
 
 
 # dump all

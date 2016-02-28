@@ -42,12 +42,13 @@ sub option_definitions {(
 
 sub initialize {
     my ( $self ) = @_;
-    $self->{e} = Search::Elasticsearch->new();
+
+    $self->{url} = $self->opt('url') || "http://localhost:9200";
+    $self->{e} = Search::Elasticsearch->new(nodes => $self->{url});
 }
 
 sub run {
     my ( $self ) = @_;
-
 
     my $outDir = $self->opt('dir');
     -d $outDir or die "Output directory '$outDir' does not exist.\n";
@@ -89,8 +90,8 @@ sub run {
     # set up the name store in the trackList.json
     $gdb->modifyTrackList( sub {
                                my ( $data ) = @_;
-                               $data->{names}{type} = 'Elastic';
-                               $data->{names}{url}  = 'names/';
+                               $data->{names}{type} = 'ElasticSearch/Store/Names/ElasticSearch';
+                               $data->{names}{url}  = $self->{url};
                                return $data;
                            });
     return;
@@ -255,16 +256,19 @@ sub do_hash_operation {
     print $op_name;
     print Dumper $record;
     if($lc_name ne '.') {
-        $self->{e}->index(
+        $self->{e}->update(
             index   => 'gene',
             type    => 'loc',
             id      => $record->[2],
             body    => {
-                name => $lc_name,
-                track_index => $record->[1],
-                ref => $record->[3],
-                start => $record->[4],
-                end => $record->[5]
+                upsert => {
+                    description => $lc_name,
+                    track_index => $record->[1],
+                    ref => $record->[3],
+                    start => $record->[4],
+                    end => $record->[5]
+                },
+                script => 'if(ctx._source.containsKey("description")) {ctx._source.description += new_description;} else {ctx._source.description = [new_description]}'
             }
         );
     }

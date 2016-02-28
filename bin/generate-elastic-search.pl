@@ -18,6 +18,7 @@ names.
 
   generate-elastic-search.pl               \
       [ --out <output directory> ]         \
+      [ --url <url for elasticsearch> ]    \
       [ --verbose ]
 
 =head1 OPTIONS
@@ -36,6 +37,11 @@ not passed, all tracks are indexed.
 =item --verbose
 
 Print more progress messages.
+
+=item --url
+
+Add a URL to the elastic search (e.g. http://host.com:9200/) for elasticsearch.
+Defaults to http://localhost:9200
 
 =item --help | -h | -?
 

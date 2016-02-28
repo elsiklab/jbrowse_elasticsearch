@@ -22,7 +22,7 @@ Then load your tracks
 
 And create the index
 
-    bin/generate-elastic-search.pl --out datadir --url http://localhost:4730
+    bin/generate-elastic-search.pl
 
 Then add the plugin to JBrowse by adding something similar to this to
 trackList.json/jbrowse_conf.json (or the myriad other ways to add plugins)

@@ -256,8 +256,7 @@ sub do_hash_operation {
     my ( $lc_name, $op_name, $record ) = @$op;
 
     if($self->opt('verbose')) {
-        print "$lc_name\n";
-        print Dumper $record;
+        print $lc_name . " ".$self->name_store->meta->{track_names}[$record->[1]] ."\n";
     }
 
     # not allowed to index names with '.'
@@ -269,7 +268,7 @@ sub do_hash_operation {
             body    => {
                 upsert => {
                     description => [$lc_name],
-                    track_index => $record->[1],
+                    track_index => $self->name_store->meta->{track_names}[$record->[1]],
                     ref => $record->[3],
                     start => $record->[4],
                     end => $record->[5]

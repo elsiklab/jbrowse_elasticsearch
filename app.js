@@ -28,7 +28,7 @@ app.get('/', function(req, res) {
                     "start": obj._source.start,
                     "end": obj._source.end,
                     "ref": obj._source.ref,
-                    "tracks": ["test"],
+                    "tracks": [obj._source.track_index],
                     "objectName" : obj._id 
                 }
             }

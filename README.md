@@ -24,13 +24,16 @@ And create the index
 
     bin/generate-elastic-search.pl --out datadir --url http://localhost:4730
 
+Then add the plugin to JBrowse by adding something similar to this to
+trackList.json/jbrowse_conf.json (or the myriad other ways to add plugins)
+
+    "plugins": ["ElasticSearch"]
+
 And you're ready :)!
 
 ## Screenshot
 
 ![](img/example.png)
-
-Normally the description ("Ok ok! I get the message") would not be indexed
 
 
 ## Considerations
@@ -40,10 +43,11 @@ Normally the description ("Ok ok! I get the message") would not be indexed
   flatfile-to-json.pl.
 
 
-* Port 4730 is the default port for the express.js app, it can be
-  overridden by a EXPRESS_PORT environment variable. Also, if your elasticsearch
-  DB is not localhost:9200 then use the --elasticurl flags
+* http://localhost:4730 is the default express.js port
 
+* http://localhost:9200 is the default elasticsearch port
+
+* There are options for overriding these
 
 * With scripting enabled on the elasticsearch DB, it is best not to expose the
   API http://localhost:9200 publically.

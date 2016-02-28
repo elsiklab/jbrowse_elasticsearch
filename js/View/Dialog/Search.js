@@ -47,7 +47,7 @@ return declare( null, {
     constructor: function( args ) {
         this.browser = args.browser;
         this.config = dojo.clone( args.config || {} );
-        this.locationChoices = args.locationChoices || [];
+        this.locationChoices = [{label:'test',description:'test',start:0,end:100,ref:'ctgA'}];
         this.title = args.title || 'Choose location';
         this.prompt = args.prompt;
         this.goCallback = args.goCallback;
@@ -79,7 +79,6 @@ return declare( null, {
                     },
                     handleAs: 'json'
                 }).then(function(res) {
-                    console.log(res);
                     //thisB.locationListView.update(res);
                     var locations = array.map( res || [], function( obj ) {
                         l = obj.location;
@@ -95,8 +94,6 @@ return declare( null, {
                                          .join(', ')
                                };
                     });
-                    console.log(locations);
-                    //thisB.locationListView.store.setData([]);
                     thisB.locationListView.grid.store.setData(locations);
                     thisB.locationListView.grid.refresh();
                 });
@@ -142,6 +139,10 @@ return declare( null, {
 
         dialog.set( 'content', [ container, this.actionBar ] );
         dialog.show();
+
+        this.locationListView.grid.store.setData([]);
+        this.locationListView.grid.refresh();
+
         aspect.after( dialog, 'hide', dojo.hitch( this, function() {
                               dijitFocus.curNode && dijitFocus.curNode.blur();
                               setTimeout( function() {

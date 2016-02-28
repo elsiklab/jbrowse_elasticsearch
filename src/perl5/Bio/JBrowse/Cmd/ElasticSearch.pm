@@ -264,8 +264,8 @@ sub do_hash_operation {
             index   => 'gene',
             type    => 'loc',
             body    => {
-                description => $record->[2],
-                name => $record->[0],
+                description => $record->[0],
+                name => $record->[2],
                 track_index => $self->name_store->meta->{track_names}[$record->[1]],
                 ref => $record->[3],
                 start => $record->[4],

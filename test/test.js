@@ -47,6 +47,7 @@ describe('ElasticSearch', function() {
             }).then(function (resp) {
                 assert.equal(resp.hits.hits.length, 1);
                 assert.equal(resp.hits.hits[0]._source.name, "rs17882967");
+                assert.equal(resp.hits.hits[0]._source.track_index, "volvox_vcf_test");
                 done();
             }, function(err) {
                 throw err;

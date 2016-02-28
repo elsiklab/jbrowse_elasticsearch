@@ -11,7 +11,6 @@ use warnings;
 
 
 use base 'Bio::JBrowse::Cmd';
-
 use Search::Elasticsearch ();
 use List::Util ();
 
@@ -61,8 +60,6 @@ sub run {
         die "No tracks. Nothing to do.\n";
     }
 
-    $self->vprint( "Tracks:\n".join('', map "    $_->{label}\n", @tracks ) );
-
     # find the names files we will be working with
     my $names_files = $self->find_names_files( \@tracks, $refSeqs );
     unless( @$names_files ) {
@@ -70,10 +67,9 @@ sub run {
              ." only reference sequence names will be indexed.\n";
     }
 
+    # store the list of tracks that have names
     $self->load( $refSeqs, $names_files );
 
-    # store the list of tracks that have names
-    $self->{track_names} = $self->{stats}{tracksWithNames};
 
     # set up the name store in the trackList.json
     $gdb->modifyTrackList( sub {
@@ -108,7 +104,7 @@ sub load {
                 body    => {
                     description => $record->[0],
                     name => $record->[2],
-                    track_index => $self->{track_names}[$record->[1] || 0],
+                    track_index => $self->{stats}{tracksWithNames}[$record->[1] || 0],
                     ref => $record->[3],
                     start => $record->[4],
                     end => $record->[5]
@@ -369,7 +365,5 @@ sub open_names_file {
     }
 }
 
-sub _hash_operation_freeze { $_[1] }
-sub _hash_operation_thaw   { $_[1] }
 
 1;

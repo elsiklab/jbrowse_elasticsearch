@@ -1,0 +1,23 @@
+{
+  "name": "jbrowse_elasticsearch",
+  "version": "1.0.0",
+  "description": "elasticsearch adaptor for JBrowse",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmdcolin/jbrowse_elasticsearch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmdcolin/jbrowse_elasticsearch/issues"
+  },
+  "homepage": "https://github.com/cmdcolin/jbrowse_elasticsearch#readme",
+  "dependencies": {
+    "elasticsearch": "^10.1.3",
+    "express": "^4.13.4"
+  }
+}

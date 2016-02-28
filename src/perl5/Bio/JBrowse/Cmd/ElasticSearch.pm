@@ -268,10 +268,13 @@ sub do_hash_operation {
             body    => {
                 upsert => {
                     description => [$lc_name],
-                    track_index => $self->name_store->meta->{track_names}[$record->[1]],
-                    ref => $record->[3],
-                    start => $record->[4],
-                    end => $record->[5]
+                    feat => [{
+                        description => $lc_name,
+                        track_index => $self->name_store->meta->{track_names}[$record->[1]],
+                        ref => $record->[3],
+                        start => $record->[4],
+                        end => $record->[5]
+                    }]
                 },
                 script => 'if(ctx._source.containsKey("description")) { if(!ctx._source.description.contains(new_description)) {ctx._source.description += new_description; }} else {ctx._source.description = [new_description]}',
                 params => {

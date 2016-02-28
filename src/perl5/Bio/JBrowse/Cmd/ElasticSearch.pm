@@ -13,21 +13,15 @@ use warnings;
 use base 'Bio::JBrowse::Cmd';
 
 use Search::Elasticsearch ();
-use File::Spec ();
-use POSIX ();
-use Storable ();
-use File::Path ();
-use File::Temp ();
 use List::Util ();
 
 use GenomeDB ();
-use Bio::JBrowse::ElasticStore ();
 
 sub option_defaults {(
     dir => 'data',
     completionLimit => 20,
     locationLimit => 100,
-    url => '/elasticsearch/',
+    url => 'http://localhost:4730/elasticsearch/',
     elasticurl => 'http://localhost:9200',
     mem => 256 * 2**20,
     tracks => [],
@@ -79,15 +73,7 @@ sub run {
     $self->load( $refSeqs, $names_files );
 
     # store the list of tracks that have names
-    $self->name_store->meta->{track_names} = [
-        $self->_uniq(
-            @{$self->name_store->meta->{track_names}||[]},
-            @{$self->{stats}{tracksWithNames}}
-        )
-    ];
-
-    # record the fact that all the keys are lowercased
-    $self->name_store->meta->{lowercase_keys} = 1;
+    $self->{track_names} = $self->{stats}{tracksWithNames};
 
     # set up the name store in the trackList.json
     $gdb->modifyTrackList( sub {
@@ -104,34 +90,35 @@ sub load {
 
     # convert the stream of name records into a stream of operations to do
     # on the data in the hash store
-    my $operation_stream = $self->make_operation_stream( $self->make_name_record_stream( $ref_seqs, $names_files ), $names_files );
+    my $op_stream = $self->make_operation_stream( $self->make_name_record_stream( $ref_seqs, $names_files ), $names_files );
 
     # hash each operation and write it to a log file
-    $self->name_store->stream_do(
-        $operation_stream,
-        sub {
-            my ( $operation, $data ) = @_;
-            my %fake_store = ( $operation->[0] => $data );
-            $self->do_hash_operation( \%fake_store, $operation );
-            return $fake_store{ $operation->[0] } ;
-        },
-        $self->{stats}{operation_stream_estimated_count},
-    );
+    while ( my $op = $op_stream->() ) {
+        my ( $lc_name, $op_name, $record ) = @$op;
 
-}
+        if($self->opt('verbose')) {
+            print "$lc_name\n";
+        }
 
-sub name_store {
-    my ( $self ) = @_;
-    unless( $self->{name_store} ) {
-        $self->{name_store} = tie my %tied_hash, 'Bio::JBrowse::ElasticStore', (
-                dir   => File::Spec->catdir( $self->opt('dir'), "names" ),
-                work_dir => $self->opt('workdir'),
-                verbose => $self->opt('verbose')
-        );
-        $self->{name_store_tied_hash} = \%tied_hash;
+        # not allowed to index names with '.'
+        if($lc_name ne '.') {
+            $self->{e}->index(
+                index   => 'gene',
+                type    => 'loc',
+                body    => {
+                    description => $record->[0],
+                    name => $record->[2],
+                    track_index => $self->{track_names}[$record->[1] || 0],
+                    ref => $record->[3],
+                    start => $record->[4],
+                    end => $record->[5]
+                }
+            );
+        }   
     }
-    return $self->{name_store};
+
 }
+
 sub make_file_record {
     my ( $self, $track, $file ) = @_;
     -f $file or die "$file not found\n";
@@ -203,23 +190,6 @@ sub make_name_record_stream {
     my %trackHash;
     my $trackNum = 0;
 
-    my $names_dir = File::Spec->catdir( $self->opt('dir'), "names" );
-    if( -e File::Spec->catfile( $names_dir,'meta.json' ) ) {
-
-        # read meta.json data into a temp HashStore
-        my $temp_store = tie my %temp_hash, 'Bio::JBrowse::ElasticStore', (
-                    dir   => $names_dir,
-                    empty => 0,
-                    compress => 0,
-                    verbose => 0);
-
-        # initialize the track hash with an index 
-        foreach (@{$temp_store->meta->{track_names}}) {
-            $trackHash{$_}=$trackNum++;
-        }
-
-        untie $temp_store;
-    }
 
 
     return sub {
@@ -232,48 +202,23 @@ sub make_name_record_stream {
             } or return;
             my @aliases = map { ref($_) ? @$_ : $_ }  @{$nameinfo->[0]};
             foreach my $alias ( @aliases ) {
-                    my $track = $nameinfo->[1];
-                    unless ( defined $trackHash{$track} ) {
-                        $trackHash{$track} = $trackNum++;
-                        push @{$self->{stats}{tracksWithNames}}, $track;
-                    }
-                    $self->{stats}{namerecs_buffered}++;
-                    push @namerecord_buffer, [
-                        $alias,
-                        $trackHash{$track},
-                        @{$nameinfo}[2..$#{$nameinfo}]
-                        ];
+                my $track = $nameinfo->[1];
+                unless ( defined $trackHash{$track} ) {
+                    $trackHash{$track} = $trackNum++;
+                    push @{$self->{stats}{tracksWithNames}}, $track;
+                }
+                $self->{stats}{namerecs_buffered}++;
+                push @namerecord_buffer, [
+                    $alias,
+                    $trackHash{$track},
+                    @{$nameinfo}[2..$#{$nameinfo}]
+                ];
             }
         }
         return shift @namerecord_buffer;
     };
 }
 
-sub do_hash_operation {
-    my ( $self, $store, $op ) = @_;
-
-    my ( $lc_name, $op_name, $record ) = @$op;
-
-    if($self->opt('verbose')) {
-        print "$lc_name\n";
-    }
-
-    # not allowed to index names with '.'
-    if($lc_name ne '.') {
-        $self->{e}->index(
-            index   => 'gene',
-            type    => 'loc',
-            body    => {
-                description => $record->[0],
-                name => $record->[2],
-                track_index => $self->name_store->meta->{track_names}[$record->[1] || 0],
-                ref => $record->[3],
-                start => $record->[4],
-                end => $record->[5]
-            }
-        );
-    }
-}
 
 
 
@@ -426,11 +371,5 @@ sub open_names_file {
 
 sub _hash_operation_freeze { $_[1] }
 sub _hash_operation_thaw   { $_[1] }
-
-sub _uniq {
-    my $self = shift;
-    my %seen;
-    return grep !($seen{$_}++), @_;
-}
 
 1;

@@ -70,7 +70,8 @@ return declare( null, {
                            className: 'prompt',
                            innerHTML: this.prompt
                        }, container );
-            var subcontainer = dojo.create('div', { padding: '10px' }, container);
+            var subcontainer = dojo.create('div', { style: { 'padding-bottom': '10px' } }, container);
+            dojo.create('img', { width: '16px', src: 'plugins/ElasticSearch/img/iconwiki.png', style: { 'padding-right': '5px' } }, subcontainer);
             var searchBox = new dijitTextBox({intermediateChanges: true}).placeAt(subcontainer);
             on(searchBox, "change", function() {
                 request(thisB.browser.config.names.url, {

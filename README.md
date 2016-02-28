@@ -42,20 +42,11 @@ And you're ready :)!
   with something like `--nameAttributes note,id,description,name` during
   flatfile-to-json.pl.
 
+* http://localhost:4730 is the default express.js port, can be overridden in
+  app.js and in --url param to generate-elastic-search.pl
 
-* http://localhost:4730 is the default express.js port
-
-* http://localhost:9200 is the default elasticsearch port
-
-* There are options for overriding these
-
-* With scripting enabled on the elasticsearch DB, it is best not to expose the
-  API http://localhost:9200 publically.
-
-  * This also gives us a good reason to just use the express.js wrapper for the 
-    JBrowse REST Names API instead of writing our own custom JBrowse plugin to adapt
-    to the elasticsearch API.
-
+* http://localhost:9200 is the default elasticsearch port, can be overridden in
+  app.js and in --elasticurl param to generate-elastic-search.pl
 
 ## Feedback
 

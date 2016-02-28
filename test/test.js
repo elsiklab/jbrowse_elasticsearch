@@ -24,8 +24,8 @@ describe('ElasticSearch', function() {
                     }
                 }
             }).then(function (resp) {
-                assert.equal(resp.hits.hits.length, 2);
-                assert.equal(resp.hits.hits[0]._source.description, "mRNA with CDSs but no UTRs");
+                assert.equal(resp.hits.hits.length, 3);
+                assert.equal(resp.hits.hits[1]._source.name, "mRNA with CDSs but no UTRs");
                 done();
             }, function(err) {
                 throw err;
@@ -66,8 +66,8 @@ describe('ElasticSearch', function() {
                     }
                 }
             }).then(function (resp) {
-                assert.equal(resp.hits.hits.length, 2);
-                assert.equal(resp.hits.hits[0]._source.description, "Ok! Ok! I get the message.");
+                assert.equal(resp.hits.hits.length, 1);
+                assert.equal(resp.hits.hits[0]._source.name, "Ok! Ok! I get the message.");
                 done();
             }, function(err) {
                 throw err;

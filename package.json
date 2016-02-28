@@ -19,5 +19,8 @@
   "dependencies": {
     "elasticsearch": "^10.1.3",
     "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
   }
 }

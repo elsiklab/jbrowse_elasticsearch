@@ -11,29 +11,18 @@ Get elastic search
 
     brew install elasticsearch
 
-
-Add scripting to elasticsearch.yml (/usr/local/etc/elasticsearch/elasticsearch.yml);
-
-    script.inline: true
-    script.indexed: true
-    
-
-
 Setup Node app
 
     npm install
     node app.js
 
-
 Then load your tracks
-
 
     flatfile-to-json.pl --nameAttributes note,id,description,name --gff docs/tutorial/data_files/volvox.gff3 --trackLabel test --trackType CanvasFeatures
 
 And create the index
 
     bin/generate-elastic-search.pl --out datadir --url http://localhost:4730
-
 
 And you're ready :)!
 

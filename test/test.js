@@ -2,19 +2,10 @@ var assert = require('assert');
 var elasticsearch = require('elasticsearch');
 
 var client = new elasticsearch.Client({
-    host: 'localhost:9200'
+    host: 'localhost:9200',
+    log: 'trace'
 });
 
-
-
-describe('Array', function() {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
-    });
-  });
-});
 
 
 describe('ElasticSearch', function() {

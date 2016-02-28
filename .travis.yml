@@ -12,10 +12,12 @@ cache:
 install:
   - cpanm --notest git://github.com/gmod/jbrowse.git -l extlib/
   - cpanm . -l extlib
+  - npm install -g jshint
   - npm install
   - export PERL5LIB=$PERL5LIB:extlib/lib/perl5
 script:
   - extlib/bin/flatfile-to-json.pl --gff test/volvox.gff3 --trackLabel volvox --trackType CanvasFeatures --nameAttributes name,id,description,note
   - extlib/bin/prepare-refseqs.pl --fasta test/volvox.fa
   - bin/generate-elastic-search.pl --url http://localhost:4730
+  - jshint app.js test
   - mocha

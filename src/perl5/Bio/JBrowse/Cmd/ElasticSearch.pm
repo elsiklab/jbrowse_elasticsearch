@@ -28,6 +28,8 @@ sub option_defaults {(
     dir => 'data',
     completionLimit => 20,
     locationLimit => 100,
+    url => '/elasticsearch/',
+    elasticurl => 'http://localhost:9200',
     mem => 256 * 2**20,
     tracks => [],
 )}
@@ -35,16 +37,17 @@ sub option_defaults {(
 sub option_definitions {(
     "dir|out=s",
     "verbose|v+",
-    "elastic=s",
+    "elasticurl=s",
+    "url=s",
     "help|h|?",
     'tracks=s@'
 )}
 
 sub initialize {
     my ( $self ) = @_;
-
-    $self->{url} = $self->opt('url') || "http://localhost:9200";
-    $self->{e} = Search::Elasticsearch->new(nodes => $self->{url});
+    $self->{e} = Search::Elasticsearch->new(
+        nodes => $self->opt('elasticurl')
+    );
 }
 
 sub run {
@@ -90,8 +93,8 @@ sub run {
     # set up the name store in the trackList.json
     $gdb->modifyTrackList( sub {
                                my ( $data ) = @_;
-                               $data->{names}{type} = 'ElasticSearch/Store/Names/ElasticSearch';
-                               $data->{names}{url}  = $self->{url};
+                               $data->{names}{type} = 'JBrowse/Store/Names/REST';
+                               $data->{names}{url}  = $self->opt('url');
                                return $data;
                            });
     return;
@@ -252,9 +255,12 @@ sub do_hash_operation {
 
     my ( $lc_name, $op_name, $record ) = @$op;
 
-    print $lc_name;
-    print $op_name;
-    print Dumper $record;
+    if($self->opt('verbose')) {
+        print "$lc_name\n";
+        print Dumper $record;
+    }
+
+    # not allowed to index names with '.'
     if($lc_name ne '.') {
         $self->{e}->update(
             index   => 'gene',
@@ -262,16 +268,13 @@ sub do_hash_operation {
             id      => $record->[2],
             body    => {
                 upsert => {
-                    description => $lc_name,
+                    description => [$lc_name],
                     track_index => $record->[1],
                     ref => $record->[3],
                     start => $record->[4],
                     end => $record->[5]
                 },
-                script => {
-                    "lang" => "expression",
-                    "inline" => "doc['description'] += new_description"
-                },
+                script => 'if(ctx._source.containsKey("description")) { if(!ctx._source.description.contains(new_description)) {ctx._source.description += new_description; }} else {ctx._source.description = [new_description]}',
                 params => {
                     "new_description" => $lc_name
                 }

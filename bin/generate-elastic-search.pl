@@ -18,7 +18,8 @@ names.
 
   generate-elastic-search.pl               \
       [ --out <output directory> ]         \
-      [ --url <url for elasticsearch> ]    \
+      [ --url <url for frontend API> ]    \
+      [ --elasticurl <url for elasticsearch> ]    \
       [ --verbose ]
 
 =head1 OPTIONS
@@ -38,10 +39,17 @@ not passed, all tracks are indexed.
 
 Print more progress messages.
 
-=item --url
+=item --elasticurl
 
 Add a URL to the elastic search (e.g. http://host.com:9200/) for elasticsearch.
 Defaults to http://localhost:9200
+
+Used for loading
+
+=item --url
+
+Add a URL to the API for the elastic search.
+Defaults to /elasticsearch/ but could be a full URL path
 
 =item --help | -h | -?
 

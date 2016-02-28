@@ -1,4 +1,4 @@
-# generate-elastic-search.pl
+# jbrowse_elasticsearch
 
 
 A JBrowse add-on for indexing names with elasticsearch

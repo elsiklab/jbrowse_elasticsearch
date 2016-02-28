@@ -266,7 +266,7 @@ sub do_hash_operation {
             body    => {
                 description => $record->[0],
                 name => $record->[2],
-                track_index => $self->name_store->meta->{track_names}[$record->[1]],
+                track_index => $self->name_store->meta->{track_names}[$record->[1] || 0],
                 ref => $record->[3],
                 start => $record->[4],
                 end => $record->[5]

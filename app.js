@@ -4,8 +4,7 @@ var app = express();
 
 
 var client = new elasticsearch.Client({
-    host: 'localhost:9200',
-    log: 'trace'
+    host: 'localhost:9200'
 });
 
 
@@ -31,7 +30,6 @@ app.get('/', function(req, res) {
         }
     }).then(function (resp) {
         var hits = resp.hits.hits;
-        console.log(hits);
         var ret = hits.map(function(obj) {
             return {
                 "name": obj._source.name,

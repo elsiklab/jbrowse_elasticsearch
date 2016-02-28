@@ -1,10 +1,12 @@
 sudo: false
 language: perl
+services:
+  - elasticsearch
 cache:
   directories:
     - extlib/
 install:
-  - cpanm --notest https://github.com/gmod/jbrowse.git -l extlib/
+  - cpanm --notest git://github.com/gmod/jbrowse.git -l extlib/
   - npm install
 script:
   - flatfile-to-json.pl --gff test/volvox.gff --trackLabel volvox --trackType CanvasFeatures --nameAttributes name,id,description,note

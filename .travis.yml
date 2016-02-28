@@ -15,4 +15,4 @@ install:
   - export PERL5LIB=$PERL5LIB:extlib/
 script:
   - extlib/bin/flatfile-to-json.pl --gff test/volvox.gff --trackLabel volvox --trackType CanvasFeatures --nameAttributes name,id,description,note
-
+  - mocha

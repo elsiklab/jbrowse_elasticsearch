@@ -1,5 +1,6 @@
 # jbrowse_elasticsearch
 
+![build staus](https://travis-ci.org/cmdcolin/jbrowse_elasticsearch.svg?branch=master)
 
 A JBrowse add-on for indexing names with elasticsearch
 

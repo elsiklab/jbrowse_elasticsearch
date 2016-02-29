@@ -89,29 +89,28 @@ sub load {
     my $op_stream = $self->make_operation_stream( $self->make_name_record_stream( $ref_seqs, $names_files ), $names_files );
 
     # hash each operation and write it to a log file
+    my $bulk = $self->{e}->bulk_helper(
+        index   => 'gene',
+        type    => 'loc',
+        verbose => $self->opt('verbose')
+    );
+    my $counter=0;
     while ( my $op = $op_stream->() ) {
         my ( $lc_name, $op_name, $record ) = @$op;
 
-        if($self->opt('verbose')) {
-            print "$lc_name\n";
-        }
-
         # not allowed to index names with '.'
         if($lc_name ne '.') {
-            $self->{e}->index(
-                index   => 'gene',
-                type    => 'loc',
-                body    => {
-                    description => $record->[0],
-                    name => $record->[2],
-                    track_index => $self->{stats}{tracksWithNames}[$record->[1] || 0],
-                    ref => $record->[3],
-                    start => $record->[4],
-                    end => $record->[5]
-                }
-            );
-        }   
+            $bulk->index({ source => {
+                description => $record->[0],
+                name => $record->[2],
+                track_index => $self->{stats}{tracksWithNames}[$record->[1] || 0],
+                ref => $record->[3],
+                start => $record->[4],
+                end => $record->[5]
+            }});
+        }
     }
+    $bulk->flush;
 
 }
 

@@ -10,12 +10,10 @@ cache:
   directories:
     - extlib/
 install:
-  - cpanm --notest git://github.com/gmod/jbrowse.git -l extlib/
   - cpanm . -l extlib
   - npm install -g jshint
   - npm install
-  - export PERL5LIB=$PERL5LIB:extlib/lib/perl5
 script:
-  - bin/test.sh
   - jshint app.js test
+  - bin/generate-elastic-search.pl --out test/volvox
   - mocha

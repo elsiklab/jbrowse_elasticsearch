@@ -5,8 +5,3 @@ MYMETA.yml
 Makefile
 blib/
 pm_to_blib
-test/volvox/.htaccess
-test/volvox/names/
-test/volvox/seq/
-test/volvox/trackList.json
-test/volvox/tracks/

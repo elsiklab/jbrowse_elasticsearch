@@ -40,7 +40,7 @@ And you're ready :)!
 
 * For descriptions to be indexed, the `--nameAttributes` flag should be used
   with something like `--nameAttributes note,id,description,name` during
-  flatfile-to-json.pl.
+  flatfile-to-json.pl. Note: the order does matter for --nameAttributes
 
 * http://localhost:4730 is the default express.js port, can be overridden in
   app.js and in --url param to generate-elastic-search.pl

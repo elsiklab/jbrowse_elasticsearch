@@ -145,7 +145,9 @@ return declare( null, {
         this.locationListView.grid.refresh();
 
         aspect.after( dialog, 'hide', dojo.hitch( this, function() {
-                              dijitFocus.curNode && dijitFocus.curNode.blur();
+                              if (dijitFocus.curNode) {
+                                  dijitFocus.curNode.blur();
+                              }
                               setTimeout( function() {
                                   dialog.destroyRecursive();
                               }, 500 );

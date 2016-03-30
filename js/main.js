@@ -50,7 +50,7 @@ return declare( JBrowsePlugin,
                 var helpMenu = registry.byId('dropdownbutton_help');
                 domConstruct.place(toolsMenu.domNode, helpMenu.domNode, 'before');
             }
-        },200);
+        }, 200);
     }
 });
 });

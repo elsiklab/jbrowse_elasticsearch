@@ -1,4 +1,7 @@
 {
+   "plugins" : [
+      "ElasticSearch"
+   ],
    "tracks" : [
       {
          "style" : {
@@ -39,6 +42,5 @@
       "url" : "http://localhost:4730/",
       "type" : "JBrowse/Store/Names/REST"
    },
-   "plugins": ["ElasticSearch"],
    "formatVersion" : 1
 }

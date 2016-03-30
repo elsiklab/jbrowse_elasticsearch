@@ -1,4 +1,5 @@
 {
-    "predef": [ "process" ]
+    "predef": [ "process" ],
+    "boss": true
 }
 

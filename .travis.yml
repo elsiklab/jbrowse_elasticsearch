@@ -15,5 +15,5 @@ install:
   - npm install
 script:
   - bin/generate-elastic-search.pl --out test/volvox
-  - jshint app.js test
+  - jshint app.js test js
   - mocha

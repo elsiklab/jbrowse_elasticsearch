@@ -1,3 +1,7 @@
+# Version 0.1.1
+
+- Cleanup some source code and tests
+
 # Version 0.1.0
 
 - Added custom dialog box to handle full text searching

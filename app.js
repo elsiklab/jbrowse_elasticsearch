@@ -8,18 +8,18 @@ var client = new elasticsearch.Client({
 });
 
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
-app.get('/', function(req, res) {
-    var q=(req.query.equals || req.query.startswith || req.query.contains).toLowerCase();
+app.get('/', function (req, res) {
+    var q = (req.query.equals || req.query.startswith || req.query.contains).toLowerCase();
 
     var fields = ["name"];
     var method = null;
-    if(req.query.contains) {
+    if (req.query.contains) {
         fields.push('description');
     }
     method = "phrase_prefix";
@@ -28,26 +28,26 @@ app.get('/', function(req, res) {
         index: 'gene',
         type: 'loc',
         body: {
-            "query": {
-                "multi_match" : {
-                    "type": method,
-                    "query": q,
-                    "fields":fields
+            query: {
+                multi_match : {
+                    type: method,
+                    query: q,
+                    fields: fields
                 }
             }
         }
     }).then(function (resp) {
         var hits = resp.hits.hits;
-        var ret = hits.map(function(obj) {
+        var ret = hits.map(function (obj) {
             return {
-                "name": obj._source.name,
-                "location": {
-                    "start": obj._source.start,
-                    "description": obj._source.description,
-                    "objectName" : obj._source.name,
-                    "end": obj._source.end,
-                    "ref": obj._source.ref,
-                    "tracks": [obj._source.track_index],
+                name: obj._source.name,
+                location: {
+                    start: obj._source.start,
+                    description: obj._source.description,
+                    objectName: obj._source.name,
+                    end: obj._source.end,
+                    ref: obj._source.ref,
+                    tracks: [obj._source.track_index]
                 }
             };
         });

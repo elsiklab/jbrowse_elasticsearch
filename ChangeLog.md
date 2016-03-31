@@ -1,8 +1,12 @@
-# Version 0.1.1
+# Version 1.0.2
 
 - Cleanup some source code and tests
 
-# Version 0.1.0
+# Version 1.0.1
+
+- Add ChangeLog.md
+
+# Version 1.0.0
 
 - Added custom dialog box to handle full text searching
 - Added ability to only use prefix searching, which helps for the REST Names API autocompletion purposes

@@ -31,6 +31,13 @@ trackList.json/jbrowse_conf.json (or the myriad other ways to add plugins)
 
 And you're ready :)!
 
+## Troubleshooting
+
+Installing the perl dependencies should be arranged before bin/generate-elastic-search.pl. The easiest thing is to install the jbrowse libs to the system with cpanm, and then install the libraries for this package by running cpanm .
+
+    cpanm --notest git://github.com/GMOD/jbrowse.git
+    cpanm .
+
 ## Screenshot
 
 ![](img/example.png)

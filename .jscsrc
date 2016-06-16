@@ -1,5 +1,0 @@
-{
-	"preset": "crockford",
-    "disallowDanglingUnderscores": false,
-    "requireMultipleVarDecl": false
-}

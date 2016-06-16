@@ -11,10 +11,10 @@ cache:
     - extlib/
 install:
   - cpanm . -l extlib
-  - npm install -g jshint
+  - npm install -g eslint eslint eslint-plugin-react eslint-config-airbnb-es5 babel-eslint
   - npm install
 script:
   - curl -XDELETE 'http://localhost:9200/_all?pretty=true'
   - bin/generate-elastic-search.pl --out test/volvox
-  - jshint app.js test js
+  - eslint app.js test js
   - mocha

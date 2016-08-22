@@ -14,7 +14,7 @@ Get elastic search
 Setup Node app
 
     npm install
-    node app.js
+    npm start
 
 Then load your tracks
 
@@ -58,3 +58,7 @@ Installing the perl dependencies should be arranged before bin/generate-elastic-
 ## Feedback
 
 Feel free to provide feedback, my first foray into elasticsearch!
+
+## Test 
+
+    npm test

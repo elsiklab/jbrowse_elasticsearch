@@ -23,7 +23,7 @@ describe('ElasticSearch', function() {
                     }
                 }
             }).then(function(resp) {
-                assert.equal(resp.hits.hits.length, 6);
+                assert.equal(resp.hits.total, 6);
                 assert.equal(resp.hits.hits[4]._source.description, 'mRNA with CDSs but no UTRs');
                 done();
             }, function(err) {
@@ -44,7 +44,7 @@ describe('ElasticSearch', function() {
                     }
                 }
             }).then(function(resp) {
-                assert.equal(resp.hits.hits.length, 1);
+                assert.equal(resp.hits.total, 1);
                 assert.equal(resp.hits.hits[0]._source.name, 'rs17882967');
                 assert.equal(resp.hits.hits[0]._source.track_index, 'volvox_vcf_test');
                 done();
@@ -66,7 +66,7 @@ describe('ElasticSearch', function() {
                     }
                 }
             }).then(function(resp) {
-                assert.equal(resp.hits.hits.length, 1);
+                assert.equal(resp.hits.total, 1);
                 assert.equal(resp.hits.hits[0]._source.description, 'Ok! Ok! I get the message.');
                 done();
             }, function(err) {

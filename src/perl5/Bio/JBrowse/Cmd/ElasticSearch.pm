@@ -143,7 +143,6 @@ sub track_is_included {
 
 
 my $OP_ADD_EXACT  = 1;
-my $OP_ADD_PREFIX = 2;
 
 sub make_operations {
     my ( $self, $record ) = @_;
@@ -223,12 +222,7 @@ sub find_names_files {
     my @files;
     for my $track (@$tracks) {
         for my $ref (@$refseqs) {
-            my $dir = File::Spec->catdir(
-                $self->opt('dir'),
-                "tracks",
-                $track->{label},
-                $ref->{name}
-                );
+            my $dir = File::Spec->catdir($self->opt('dir'), "tracks", $track->{label}, $ref->{name});
 
             # read either names.txt or names.json files
             my $name_records_iterator;
@@ -245,10 +239,7 @@ sub find_names_files {
         }
 
         # try to detect VCF tracks and index their VCF files
-        if( $track->{storeClass}
-            && ( $track->{urlTemplate} && $track->{urlTemplate} =~ /\.vcf\.gz/
-             || $track->{storeClass} =~ /VCFTabix$/ )
-            ) {
+        if( $track->{storeClass} && ( $track->{urlTemplate} && $track->{urlTemplate} =~ /\.vcf\.gz/ || $track->{storeClass} =~ /VCFTabix$/ ) ) {
             my $path = File::Spec->catfile( $self->opt('dir'), $track->{urlTemplate} );
             if( -r $path ) {
                 push @files, $self->make_file_record( $track, $path );

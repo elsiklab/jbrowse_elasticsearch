@@ -3,12 +3,14 @@ language: perl
 addons:
   apt:
     packages:
-    - libdb-dev
+      - libdb-dev
 services:
   - elasticsearch
 install:
   - bash setup.sh
   - curl -XDELETE 'http://localhost:9200/_all?pretty=true'
+before_script:
+  - sleep 10
 script:
   - bin/generate-elastic-search.pl --out test/volvox
   - npm test

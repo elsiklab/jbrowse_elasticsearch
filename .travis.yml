@@ -7,12 +7,10 @@ addons:
 services:
   - elasticsearch
 install:
-  - cpanm --notest git://github.com/GMOD/jbrowse.git
-  - cpanm . -l extlib
   - npm install -g eslint eslint eslint-plugin-react eslint-config-airbnb-es5 babel-eslint
-  - npm install
-script:
+  - bash setup.sh
   - curl -XDELETE 'http://localhost:9200/_all?pretty=true'
+script:
   - bin/generate-elastic-search.pl --out test/volvox
   - eslint app.js test js
-  - mocha
+  - npm test

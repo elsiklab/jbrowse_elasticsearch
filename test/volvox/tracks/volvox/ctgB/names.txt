@@ -1,4 +1,0 @@
-[["ctgB"],"volvox","ctgB","ctgB",0,6079]
-[["f07","This is an example"],"volvox","f07","ctgB",1658,1984]
-[["f06","This is another example"],"volvox","f06","ctgB",3013,6130]
-[["f05","ああ、この機能は、世界中を旅しています！"],"volvox","f05","ctgB",4714,5968]

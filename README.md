@@ -1,6 +1,6 @@
 # jbrowse_elasticsearch
 
-![build staus](https://travis-ci.org/cmdcolin/jbrowse_elasticsearch.svg?branch=master)
+[![Build Status](https://travis-ci.org/elsiklab/jbrowse_elasticsearch.svg?branch=master)](https://travis-ci.org/elsiklab/jbrowse_elasticsearch)
 
 A JBrowse add-on for indexing names with elasticsearch
 

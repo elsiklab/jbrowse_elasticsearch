@@ -33,12 +33,6 @@ Finally start the helper app (starts app.js as middleware for elasticsearch quer
     npm start
 
 
-## Troubleshooting
-
-* The setup.sh installs the jbrowse libs to the system with cpanm, if there are problems with setup.sh make sure cpanm is installed correctly
-
-* For the gene descriptions to be indexed, the `--nameAttributes` flag should be used with something like `--nameAttributes name,description,other_field_to_index`. By default --nameAttributes is id,name,alias. The order of arguments in --nameAttributes is important, the first should be the unique name, id or symbol (or whatever is acceptable to appear in the name box in the popup). Other arguments after the first are then all associated with the first as descriptions, with multiple descriptions being allowed
-
 ## Example GFF
 
 If you have a feature such as
@@ -60,12 +54,43 @@ This would make `symbol_ncbi` the "primary key" and associate the `gene_synonym`
 ![](img/example.png)
 
 
+## Configuration
+
+
+- elasticSearchUrl - the location of the express.js middleware, e.g. http://localhost:4730
+- elasticIndexName - optional: the name of a specific elastic index that you loaded data into, normally used if you have multiple genomes
+
+These are automatically added to trackList.json by the bin/generate-elastic-search.pl
+
+## Troubleshooting
+
+
+* The setup.sh installs the jbrowse libs to the system with cpanm, if there are problems with setup.sh make sure cpanm is installed correctly
+
+* For the gene descriptions to be indexed, the `--nameAttributes` flag should be used with flatfile-to-json.pl with something like `--nameAttributes name,description,other_field_to_index`. By default --nameAttributes is id,name,alias. The order of arguments in --nameAttributes is important, the first should be the unique name, id or symbol (or whatever is acceptable to appear in the name box in the popup). Other arguments after the first are then all associated with the first as descriptions, with multiple descriptions being allowed
+
+* If your tracklist significantly changes you may need to regenerate your names index (the elasticsearch data refers to indexes in the tracks and if your tracklist changes then you will not be referring to the correct track, jbrowse default generate-names.pl does this also)
+
+
+## Multiple genomes configuration
+
+Use --genome argument to bin/generate-elastic-search.pl which creates different indexes (the elasticsearch equivalent of a different database) for each genome that your run
+
+
+## Middleware configuration
+
+In a production configuration, you may use a reverse proxy for the express.js middleware, e.g. put this basic config in your apache config file
+
+    ProxyPass /elastic http://localhost:4730
+    ProxyPassReverse /elastic http://localhost:4730
+
 
 ## Defaults
 
 * http://localhost:4730 is the default express.js port, can be overridden in app.js and in --url param to generate-elastic-search.pl
 
 * http://localhost:9200 is the default elasticsearch port, can be overridden in app.js and in --elasticurl param to generate-elastic-search.pl
+
 
 ## Feedback
 

@@ -1,6 +1,7 @@
 # Version 1.0.3
 
 - Add total hits to dialog box
+- Add ability to support multiple genomes via different elasticsearch indexes (see --genome argument to generate-elastic-search.pl)
 
 # Version 1.0.2
 

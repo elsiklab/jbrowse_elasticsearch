@@ -12,7 +12,7 @@ define([
     'JBrowse/View/LocationList',
     'JBrowse/Util'
 ],
-function(
+function (
     declare,
     array,
     dom,
@@ -27,7 +27,7 @@ function(
     Util
 ) {
     return declare(null, {
-        constructor: function(args) {
+        constructor: function (args) {
             this.browser = args.browser;
             this.config = dojo.clone(args.config || {});
             this.locationChoices = [{label: 'test', description: 'test', start: 0, end: 100, ref: 'ctgA'}];
@@ -37,7 +37,7 @@ function(
             this.showCallback = args.showCallback;
         },
 
-        show: function() {
+        show: function () {
             var dialog = this.dialog = new Dialog({
                 title: this.title,
                 className: 'locationChoiceDialog',
@@ -54,18 +54,17 @@ function(
                 var subcontainer = dojo.create('div', { style: { 'padding-bottom': '10px' } }, container);
                 dojo.create('img', { width: '16px', src: 'plugins/ElasticSearch/img/iconwiki.png', style: { 'padding-right': '5px' } }, subcontainer);
                 var searchBox = new TextBox({intermediateChanges: true}).placeAt(subcontainer);
-                on(searchBox, 'change', function() {
+                on(searchBox, 'change', function () {
                     request(thisB.browser.config.elasticSearchUrl, {
                         query: {
-                            contains: searchBox.get('value')
-                        },
-                        handleAs: 'json'
-                    }).then(function(res) {
-                        console.log(res);
-                        numresults.innerHTML = "Total results: "+res.total;
-                        
+                            contains: searchBox.get('value'),
+                            index: thisB.browser.config.elasticIndexName
+                        }
+                    }).then(function (results) {
+                        var res = JSON.parse(results);
+                        numresults.innerHTML = 'Total results: ' + res.total;
 
-                        var locations = array.map(res.hits || [], function(obj) {
+                        var locations = array.map(res.hits || [], function (obj) {
                             var l = obj.location;
                             return {
                                 locstring: Util.assembleLocString(l),
@@ -73,14 +72,21 @@ function(
                                 label: l.name || l.objectName,
                                 description: l.description,
                                 score: l.score,
-                                tracks: array.map(array.filter(l.tracks || [], function(t) { return t; }), // remove nulls
-                                            function(t) {
+                                tracks: array.map(array.filter(l.tracks || [], function (t) { return t; }), // remove nulls
+                                            function (t) {
                                                 return t.key || t.name || t.label || t;
                                             }).join(', ')
                             };
                         });
                         thisB.locationListView.grid.store.setData(locations);
                         thisB.locationListView.grid.refresh();
+                        errResults.innerHTML = '';
+                    }, function (err) {
+                        console.error(err);
+                        thisB.locationListView.grid.store.setData([]);
+                        thisB.locationListView.grid.refresh();
+                        numresults.innerHTML = '';
+                        errResults.innerHTML = 'Error: ' + err;
                     });
                 });
                 this.searchBox = searchBox;
@@ -94,14 +100,14 @@ function(
                     buttons: [{
                         className: 'show',
                         innerHTML: 'Show',
-                        onClick: this.showCallback || function(location) {
+                        onClick: this.showCallback || function (location) {
                             browser.showRegionAfterSearch(location);
                         }
                     },
                     {
                         className: 'go',
                         innerHTML: 'Go',
-                        onClick: this.goCallback   || function(location) {
+                        onClick: this.goCallback   || function (location) {
                             dialog.hide();
                             browser.showRegionAfterSearch(location);
                         }
@@ -121,18 +127,19 @@ function(
                 onClick: dojo.hitch(dialog, 'hide')
             }).placeAt(this.actionBar);
 
-            var numresults = dojo.create('div', { id: 'numResults',style: {margin:'10px'} }, container);
+            var numresults = dojo.create('div', { id: 'numResults', style: {margin: '10px'} }, container);
+            var errResults = dojo.create('div', { id: 'errResults', style: {margin: '10px', color: 'red'} }, container);
             dialog.set('content', [ container, this.actionBar ]);
             dialog.show();
 
             this.locationListView.grid.store.setData([]);
             this.locationListView.grid.refresh();
 
-            aspect.after(dialog, 'hide', dojo.hitch(this, function() {
+            aspect.after(dialog, 'hide', dojo.hitch(this, function () {
                 if (dijitFocus.curNode) {
                     dijitFocus.curNode.blur();
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     dialog.destroyRecursive();
                 }, 500);
             }));

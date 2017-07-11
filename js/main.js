@@ -7,7 +7,7 @@ define([
     'dijit/registry',
     'dojo/dom-construct'
 ],
-function(
+function (
     declare,
     dom,
     JBrowsePlugin,
@@ -17,20 +17,20 @@ function(
     domConstruct
 ) {
     return declare(JBrowsePlugin, {
-        constructor: function(args) {
+        constructor: function (args) {
             this.browser = args.browser;
 
             console.log('ElasticSearch plugin starting');
 
             this.browser.afterMilestone('initView', dojo.hitch(this, 'initSearchMenu'));
         },
-        initSearchMenu: function()  {
+        initSearchMenu: function ()  {
             var thisB = this;
             this.browser.addGlobalMenuItem('tools',
                new MenuItem({
                    id: 'menubar_search',
                    label: 'ElasticSearch',
-                   onClick: function() {
+                   onClick: function () {
                        new LocationChoiceDialog({
                            browser: thisB.browser,
                            locationList: [],
@@ -41,7 +41,7 @@ function(
                })
            );
 
-            setTimeout(function() {
+            setTimeout(function () {
                 if (!registry.byId('dropdownmenu_tools')) {
                     thisB.browser.renderGlobalMenu('tools', {text: 'Tools'}, thisB.browser.menuBar);
                     var toolsMenu = registry.byId('dropdownbutton_tools');

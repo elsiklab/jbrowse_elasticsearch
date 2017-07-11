@@ -38,7 +38,6 @@ app.get('/', function(req, res) {
             }
         }
     }).then(function(resp) {
-        console.log(resp)
         var hits = resp.hits.hits;
         var total = resp.hits.total;
         var ret = {};

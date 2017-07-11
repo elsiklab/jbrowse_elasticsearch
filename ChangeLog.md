@@ -1,3 +1,7 @@
+# Version 1.0.3
+
+- Add total hits to dialog box
+
 # Version 1.0.2
 
 - Cleanup some source code and tests

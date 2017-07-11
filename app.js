@@ -27,6 +27,7 @@ app.get('/', function(req, res) {
     client.search({
         index: 'gene',
         type: 'loc',
+        size: 50,
         body: {
             query: {
                 multi_match: {
@@ -37,8 +38,11 @@ app.get('/', function(req, res) {
             }
         }
     }).then(function(resp) {
+        console.log(resp)
         var hits = resp.hits.hits;
-        var ret = hits.map(function(obj) {
+        var total = resp.hits.total;
+        var ret = {};
+        ret.hits = hits.map(function(obj) {
             return {
                 name: obj._source.name,
                 location: {
@@ -51,6 +55,7 @@ app.get('/', function(req, res) {
                 }
             };
         });
+        ret.total = total;
         res.type('application/json');
         res.send(ret);
     }, function(err) {

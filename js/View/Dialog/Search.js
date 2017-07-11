@@ -55,13 +55,17 @@ function(
                 dojo.create('img', { width: '16px', src: 'plugins/ElasticSearch/img/iconwiki.png', style: { 'padding-right': '5px' } }, subcontainer);
                 var searchBox = new TextBox({intermediateChanges: true}).placeAt(subcontainer);
                 on(searchBox, 'change', function() {
-                    request(thisB.browser.config.names.url, {
+                    request(thisB.browser.config.elasticSearchUrl, {
                         query: {
                             contains: searchBox.get('value')
                         },
                         handleAs: 'json'
                     }).then(function(res) {
-                        var locations = array.map(res || [], function(obj) {
+                        console.log(res);
+                        numresults.innerHTML = "Total results: "+res.total;
+                        
+
+                        var locations = array.map(res.hits || [], function(obj) {
                             var l = obj.location;
                             return {
                                 locstring: Util.assembleLocString(l),
@@ -109,6 +113,7 @@ function(
                 }, container)
             );
 
+
             this.actionBar = dojo.create('div', { className: 'infoDialogActionBar dijitDialogPaneActionBar' });
             new Button({
                 iconClass: 'dijitIconDelete',
@@ -116,6 +121,7 @@ function(
                 onClick: dojo.hitch(dialog, 'hide')
             }).placeAt(this.actionBar);
 
+            var numresults = dojo.create('div', { id: 'numResults',style: {margin:'10px'} }, container);
             dialog.set('content', [ container, this.actionBar ]);
             dialog.show();
 

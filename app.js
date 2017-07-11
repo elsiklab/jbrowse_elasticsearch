@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
     method = 'phrase_prefix';
 
     client.search({
-        index: 'gene',
+        index: 'gene'+(query.index||''),
         type: 'loc',
         size: 50,
         body: {

@@ -20,6 +20,7 @@ names.
       [ --out <output directory> ]         \
       [ --url <url for frontend API> ]    \
       [ --elasticurl <url for elasticsearch> ]    \
+      [ --genome <a name for your organism, optional>] \
       [ --verbose ]
 
 =head1 OPTIONS
@@ -38,6 +39,10 @@ not passed, all tracks are indexed.
 =item --verbose
 
 Print more progress messages.
+
+=item --genome
+
+A name for your organism, optional but used for multiple genome configurations
 
 =item --elasticurl
 

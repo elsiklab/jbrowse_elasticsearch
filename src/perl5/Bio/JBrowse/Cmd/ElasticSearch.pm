@@ -74,8 +74,8 @@ sub run {
     # set up the name store in the trackList.json
     $gdb->modifyTrackList( sub {
                                my ( $data ) = @_;
-                               $data->{names}{type} = 'JBrowse/Store/Names/REST';
-                               $data->{names}{url}  = $self->opt('url');
+                               $data->{elasticIndexName} = $self->opt('genome');
+                               $data->{elasticSearchUrl} = $self->opt('url');
                                return $data;
                            });
     return;
@@ -90,7 +90,7 @@ sub load {
 
     # hash each operation and write it to a log file
     my $bulk = $self->{e}->bulk_helper(
-        index   => 'gene',
+        index   => 'gene' + ($self->opt('genome')||''),
         type    => 'loc',
         verbose => $self->opt('verbose')
     );

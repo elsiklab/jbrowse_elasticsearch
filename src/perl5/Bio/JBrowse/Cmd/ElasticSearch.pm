@@ -22,6 +22,7 @@ sub option_defaults {(
     locationLimit => 100,
     url => 'http://localhost:4730/',
     elasticurl => 'http://localhost:9200',
+    genome => '',
     mem => 256 * 2**20,
     tracks => [],
 )}
@@ -30,6 +31,7 @@ sub option_definitions {(
     "dir|out=s",
     "verbose|v+",
     "elasticurl=s",
+    "genome=s",
     "url=s",
     "help|h|?",
     'tracks=s@'
@@ -90,7 +92,7 @@ sub load {
 
     # hash each operation and write it to a log file
     my $bulk = $self->{e}->bulk_helper(
-        index   => 'gene' . ($self->opt('genome')||''),
+        index   => 'gene' . $self->opt('genome'),
         type    => 'loc',
         verbose => $self->opt('verbose')
     );

@@ -68,9 +68,10 @@ This would make `symbol_ncbi` the "primary key" and associate the `gene_synonym`
 
 These are automatically added to trackList.json by the bin/generate-elastic-search.pl
 
-## Considerations
+## Troubleshooting
 
-Note that if your tracklist significantly changes you may need to regenerate your names index (the elasticsearch data refers to indexes in the tracks and if your tracklist changes then you will not be referring to the correct track, jbrowse default generate-names.pl does this also)
+- If your tracklist significantly changes you may need to regenerate your names index (the elasticsearch data refers to indexes in the tracks and if your tracklist changes then you will not be referring to the correct track, jbrowse default generate-names.pl does this also)
+- The setup.sh installs JBrowse perl libraries using cpanminus because it interacts with the JBrowse data directories, make sure your cpanminus configuration is setup
 
 ## Multiple genomes configuration
 

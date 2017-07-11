@@ -90,7 +90,7 @@ sub load {
 
     # hash each operation and write it to a log file
     my $bulk = $self->{e}->bulk_helper(
-        index   => 'gene' + ($self->opt('genome')||''),
+        index   => 'gene' . ($self->opt('genome')||''),
         type    => 'loc',
         verbose => $self->opt('verbose')
     );

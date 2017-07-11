@@ -68,6 +68,10 @@ This would make `symbol_ncbi` the "primary key" and associate the `gene_synonym`
 
 These are automatically added to trackList.json by the bin/generate-elastic-search.pl
 
+## Considerations
+
+Note that if your tracklist significantly changes you may need to regenerate your names index (the elasticsearch data refers to indexes in the tracks and if your tracklist changes then you will not be referring to the correct track, jbrowse default generate-names.pl does this also)
+
 ## Multiple genomes configuration
 
 Use --genome argument to bin/generate-elastic-search.pl which creates different indexes (the elasticsearch equivalent of a different database) for each genome that your run

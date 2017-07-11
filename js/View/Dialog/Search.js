@@ -57,7 +57,7 @@ function(
                 on(searchBox, 'change', function() {
                     request(thisB.browser.config.elasticSearchUrl, {
                         query: {
-                            contains: searchBox.get('value')
+                            contains: searchBox.get('value'),
                             index: thisB.browser.config.elasticIndexName
                         }
                     }).then(function(res) {

@@ -58,12 +58,10 @@ function(
                     request(thisB.browser.config.elasticSearchUrl, {
                         query: {
                             contains: searchBox.get('value')
-                        },
-                        handleAs: 'json'
+                        }
                     }).then(function(res) {
-                        console.log(res);
+                        res = JSON.parse(res);
                         numresults.innerHTML = "Total results: "+res.total;
-                        
 
                         var locations = array.map(res.hits || [], function(obj) {
                             var l = obj.location;
@@ -81,6 +79,13 @@ function(
                         });
                         thisB.locationListView.grid.store.setData(locations);
                         thisB.locationListView.grid.refresh();
+                        errResults.innerHTML = '';
+                    }, function(err) {
+                        console.error(err);
+                        thisB.locationListView.grid.store.setData([]);
+                        thisB.locationListView.grid.refresh();
+                        numresults.innerHTML = '';
+                        errResults.innerHTML = 'Error: '+err;
                     });
                 });
                 this.searchBox = searchBox;
@@ -122,6 +127,7 @@ function(
             }).placeAt(this.actionBar);
 
             var numresults = dojo.create('div', { id: 'numResults',style: {margin:'10px'} }, container);
+            var errorResults = dojo.create('div', { id: 'errResults',style: {margin:'10px',color: 'red'} }, container);
             dialog.set('content', [ container, this.actionBar ]);
             dialog.show();
 

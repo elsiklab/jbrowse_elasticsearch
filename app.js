@@ -1,7 +1,9 @@
 var elasticsearch = require('elasticsearch');
+var baseURI = require('base-uri');
 var express = require('express');
 var app = express();
 
+var router = express.Router();
 
 var client = new elasticsearch.Client({
     host: 'localhost:9200'
@@ -13,8 +15,8 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
-
-app.get('/', function(req, res) {
+var router = express.Router();
+router.get('/', function(req, res) {
     var q = (req.query.equals || req.query.startswith || req.query.contains).toLowerCase();
 
     var fields = ['name'];
@@ -63,5 +65,6 @@ app.get('/', function(req, res) {
 });
 
 
+app.use(baseURI, router);
 
 module.exports = app;

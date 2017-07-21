@@ -1,6 +1,6 @@
 {
   "name": "jbrowse_elasticsearch",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "elasticsearch adaptor for JBrowse",
   "main": "app.js",
   "scripts": {
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/cmdcolin/jbrowse_elasticsearch#readme",
   "dependencies": {
+    "base-uri": "^1.1.0",
+    "debug": "^2.6.8",
     "elasticsearch": "^13.2.0",
     "express": "^4.15.3"
   },

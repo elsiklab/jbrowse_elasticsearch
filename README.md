@@ -84,6 +84,18 @@ In a production configuration, you may use a reverse proxy for the express.js mi
     ProxyPass /elastic http://localhost:4730
     ProxyPassReverse /elastic http://localhost:4730
 
+Alternatively run it on Passenger Phusion
+
+    Alias /elasticsearch /mnt/webdata/jbrowse/plugins/ElasticSearch
+    <Location /elasticsearch>
+        PassengerBaseURI /elasticsearch
+        PassengerAppRoot /mnt/webdata/jbrowse/plugins/ElasticSearch
+
+        PassengerAppType node
+        PassengerStartupFile bin/www
+    </Location>
+
+Then point the elasticSearchUrl parameter to http://yoursite/elasticsearch
 
 ## Defaults
 

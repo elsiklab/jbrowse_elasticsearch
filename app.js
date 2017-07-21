@@ -62,4 +62,9 @@ app.get('/', function(req, res) {
     });
 });
 
-app.listen(process.env.EXPRESS_PORT || 4730);
+
+if (typeof(PhusionPassenger) !== 'undefined') {
+    app.listen('passenger');
+} else {
+    app.listen(process.env.EXPRESS_PORT || 4730);
+}

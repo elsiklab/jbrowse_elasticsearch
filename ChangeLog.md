@@ -1,3 +1,7 @@
+# Version 1.0.4
+
+- Support passenger phusion
+
 # Version 1.0.3
 
 - Add total hits to dialog box

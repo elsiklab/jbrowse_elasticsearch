@@ -57,7 +57,7 @@ This would make `symbol_ncbi` the "primary key" and associate the `gene_synonym`
 ## Configuration
 
 
-- elasticSearchUrl - the location of the express.js middleware, e.g. http://localhost:4730
+- elasticSearchUrl - the location of the express.js middleware, e.g. http://localhost:3000
 - elasticIndexName - optional: the name of a specific elastic index that you loaded data into, normally used if you have multiple genomes
 
 These are automatically added to trackList.json by the bin/generate-elastic-search.pl
@@ -81,8 +81,8 @@ Use --genome argument to bin/generate-elastic-search.pl which creates different 
 
 In a production configuration, you may use a reverse proxy for the express.js middleware, e.g. put this basic config in your apache config file
 
-    ProxyPass /elastic http://localhost:4730
-    ProxyPassReverse /elastic http://localhost:4730
+    ProxyPass /elastic http://localhost:3000
+    ProxyPassReverse /elastic http://localhost:3000
 
 Alternatively run it on Passenger Phusion
 
@@ -99,7 +99,7 @@ Then point the elasticSearchUrl parameter to http://yoursite/elasticsearch
 
 ## Defaults
 
-* http://localhost:4730 is the default express.js port, can be overridden in app.js and in --url param to generate-elastic-search.pl
+* http://localhost:3000 is the default express.js port, can be overridden in app.js and in --url param to generate-elastic-search.pl
 
 * http://localhost:9200 is the default elasticsearch port, can be overridden in app.js and in --elasticurl param to generate-elastic-search.pl
 

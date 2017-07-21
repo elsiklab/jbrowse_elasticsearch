@@ -51,14 +51,15 @@ function (
                     className: 'prompt',
                     innerHTML: this.prompt
                 }, container);
-                var subcontainer = dojo.create('div', { style: { 'padding-bottom': '10px' } }, container);
+                var subcontainer = dojo.create('div', { style: { 'padding': '20px' } }, container);
                 dojo.create('img', { width: '16px', src: 'plugins/ElasticSearch/img/iconwiki.png', style: { 'padding-right': '5px' } }, subcontainer);
                 var searchBox = new TextBox({intermediateChanges: true}).placeAt(subcontainer);
                 on(searchBox, 'change', function () {
                     request(thisB.browser.config.elasticSearchUrl, {
                         query: {
                             contains: searchBox.get('value'),
-                            index: thisB.browser.config.elasticIndexName
+                            index: thisB.browser.config.elasticIndexName,
+                            exact: thisB.exactCheckbox.checked
                         }
                     }).then(function (results) {
                         var res = JSON.parse(results);
@@ -78,20 +79,23 @@ function (
                                             }).join(', ')
                             };
                         });
-                        thisB.locationListView.grid.store.setData(locations);
+                        var g = thisB.locationListView.grid;
+                        (g.store || g.collection).setData(locations);
                         thisB.locationListView.grid.refresh();
                         errResults.innerHTML = '';
                     }, function (err) {
                         console.error(err);
-                        thisB.locationListView.grid.store.setData([]);
+                        var g = thisB.locationListView.grid;
+                        (g.store || g.collection).setData([]);
                         thisB.locationListView.grid.refresh();
                         numresults.innerHTML = '';
                         errResults.innerHTML = 'Error: ' + err;
                     });
                 });
                 this.searchBox = searchBox;
+                dojo.create('label', {style: {marginLeft: '20px'}, for: 'exact_match', innerHTML: 'Exact?'}, subcontainer);
+                thisB.exactCheckbox = dojo.create('input', {type: 'checkbox', id: 'exact_match'}, subcontainer);
             }
-
             var browser = this.browser;
             this.locationListView = new LocationListView(
                 {
@@ -131,9 +135,6 @@ function (
             var errResults = dojo.create('div', { id: 'errResults', style: {margin: '10px', color: 'red'} }, container);
             dialog.set('content', [ container, this.actionBar ]);
             dialog.show();
-
-            this.locationListView.grid.store.setData([]);
-            this.locationListView.grid.refresh();
 
             aspect.after(dialog, 'hide', dojo.hitch(this, function () {
                 if (dijitFocus.curNode) {

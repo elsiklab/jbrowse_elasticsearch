@@ -10,7 +10,7 @@ Drop database
 
 Load database
 
-    bin/generate-elastic-search.pl --out ../../sample_data/json/volvox/ --url http://localhost:4730 --verbose
+    bin/generate-elastic-search.pl --out ../../sample_data/json/volvox/ --url http://localhost:3000 --verbose
 
 Dump database
 

@@ -17,29 +17,30 @@ app.use(function(req, res, next) {
 });
 var router = express.Router();
 router.get('/', function(req, res) {
-    var q = (req.query.equals || req.query.startswith || req.query.contains).toLowerCase();
-
-    var fields = ['name'];
-    var method = null;
-    if (req.query.contains) {
-        fields.push('description');
-    }
-    method = 'phrase_prefix';
-
-    client.search({
+    var q = (req.query.equals || req.query.startswith || req.query.contains || '').toLowerCase();
+    var exact = req.query.exact == "true";
+    var query = {
         index: 'gene'+(req.query.index||''),
         type: 'loc',
-        size: 50,
-        body: {
+        size: 50
+    };
+
+    if(exact) {
+        query.q = q;
+    } else {
+        query.body = {
             query: {
                 multi_match: {
-                    type: method,
+                    type: 'phrase_prefix',
                     query: q,
-                    fields: fields
+                    fields: [ 'name', 'description' ]
                 }
             }
         }
-    }).then(function(resp) {
+    }
+
+
+    client.search(query).then(function(resp) {
         var hits = resp.hits.hits;
         var total = resp.hits.total;
         var ret = {};

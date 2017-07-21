@@ -1,6 +1,8 @@
 # Version 1.0.4
 
-- Support passenger phusion
+- Add "exact" search
+- Fix for for super-new dgrid versions (post 1.12.3 in jbrowse)
+- Add note about using passenger phusion
 
 # Version 1.0.3
 

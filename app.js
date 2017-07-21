@@ -63,8 +63,5 @@ app.get('/', function(req, res) {
 });
 
 
-if (typeof(PhusionPassenger) !== 'undefined') {
-    app.listen('passenger');
-} else {
-    app.listen(process.env.EXPRESS_PORT || 4730);
-}
+
+module.exports = app;

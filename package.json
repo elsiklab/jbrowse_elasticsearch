@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "start": "node app.js"
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/cmdcolin/jbrowse_elasticsearch#readme",
   "dependencies": {
-    "elasticsearch": "^11.0.1",
-    "express": "^4.14.0"
+    "elasticsearch": "^13.2.0",
+    "express": "^4.15.3"
   },
   "devDependencies": {
-    "mocha": "^3.0.2"
+    "mocha": "^3.4.2"
   }
 }

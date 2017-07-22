@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/elsiklab/jbrowse_elasticsearch.svg?branch=master)](https://travis-ci.org/elsiklab/jbrowse_elasticsearch)
 
-A JBrowse add-on for indexing names with elasticsearch
+A JBrowse add-on for indexing names with elasticsearch. Allows searching full text descriptions of genes!
 
 ## Pre-requisites
 
@@ -33,7 +33,7 @@ Finally start the helper app (starts app.js as middleware for elasticsearch quer
     npm start
 
 
-## Example GFF
+## Loading full text descriptions
 
 If you have a feature such as
 

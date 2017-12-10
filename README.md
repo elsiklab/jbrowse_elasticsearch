@@ -81,12 +81,12 @@ Use --genome argument to bin/generate-elastic-search.pl which creates different 
 
 ## Middleware configuration
 
-In a production configuration, you may use a reverse proxy for the express.js middleware, e.g. put this basic config in your apache config file
+Normally, you can start the express.js middleware for jbrowse_elasticsearch (a small service that queries elasticsearch for you) by running "npm install" and "npm start" in the root folder of this repo. In a production configuration, you may wish to use a reverse proxy to make this accessible from a standard http endpoint e.g. put this basic config in your apache config file
 
     ProxyPass /elastic http://localhost:3000
     ProxyPassReverse /elastic http://localhost:3000
 
-Alternatively run it on Passenger Phusion
+You can also, instead of relying on "npm start" to keep the service running, run it on Passenger Phusion
 
     Alias /elasticsearch /mnt/webdata/jbrowse/plugins/ElasticSearch
     <Location /elasticsearch>
@@ -98,6 +98,8 @@ Alternatively run it on Passenger Phusion
     </Location>
 
 Then point the elasticSearchUrl parameter to http://yoursite/elasticsearch
+
+Note that the express.js middleware is pretty small, but it is recommended to use an endpoint like this rather than expose the elasticsearch REST API to the public.
 
 ## Defaults
 

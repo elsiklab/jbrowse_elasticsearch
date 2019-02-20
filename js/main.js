@@ -28,7 +28,7 @@ function (
             var thisB = this;
             this.browser.addGlobalMenuItem('tools',
                new MenuItem({
-                   id: 'menubar_search',
+                   id: 'menubar_elasticsearch',
                    label: 'ElasticSearch',
                    onClick: function () {
                        new LocationChoiceDialog({

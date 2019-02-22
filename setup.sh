@@ -3,7 +3,7 @@ set -eu -o pipefail
 
 echo "Installing Perl pre-requisites"
 cpanm --notest .
-cpanm --notest git://github.com/GMOD/jbrowse.git
+cpanm --notest https://github.com/GMOD/jbrowse/archive/master.tar.gz
 
 echo "Installing NodeJS pre-requisites"
 npm install

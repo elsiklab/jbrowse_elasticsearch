@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/dom',
     'JBrowse/Plugin',
-    'ElasticSearch/View/Dialog/Search',
+    './View/Dialog/Search',
     'dijit/MenuItem',
     'dijit/registry',
     'dojo/dom-construct'

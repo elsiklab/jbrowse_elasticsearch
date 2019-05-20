@@ -1,3 +1,7 @@
+# Version 1.0.5
+
+- Pin to specific bioperl version
+
 # Version 1.0.4
 
 - Add "exact" search

@@ -1,6 +1,6 @@
 {
   "name": "jbrowse_elasticsearch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "elasticsearch adaptor for JBrowse",
   "main": "app.js",
   "scripts": {

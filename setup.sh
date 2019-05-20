@@ -2,6 +2,8 @@
 set -eu -o pipefail
 
 echo "Installing Perl pre-requisites"
+cpanm -v --notest Bio::Perl@1.7.2 < /dev/null;
+cpanm -v --notest Bio::Perl@1.7.2 < /dev/null;
 cpanm --notest .
 cpanm --notest https://github.com/GMOD/jbrowse/archive/master.tar.gz
 

@@ -76,7 +76,9 @@ These are automatically added to trackList.json by the bin/generate-elastic-sear
 
 ## Multiple genomes configuration
 
-Use --genome argument to bin/generate-elastic-search.pl which creates different indexes (the elasticsearch equivalent of a different database) for each genome that your run
+Use --genome argument to bin/generate-elastic-search.pl which creates different indexes (the elasticsearch equivalent of a different database) for each genome that your run. Note: just use a simple name for this --genome, e.g. --genome FruitFly
+
+It is just used for organizing the elasticsearch database, it's not a file path to a file. 
 
 
 ## Middleware configuration
